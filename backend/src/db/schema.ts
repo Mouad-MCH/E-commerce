@@ -1,6 +1,5 @@
 import {
     pgTable,
-    varchart,
     text,
     timestamp,
     boolean,
