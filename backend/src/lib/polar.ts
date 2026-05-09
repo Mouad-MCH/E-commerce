@@ -21,7 +21,7 @@ export async function polarCreateCheckout(env: ENV, body: CheckoutCreateBody) {
   const token = env.POLAR_ACCESS_TOKEN;
   if (!token) throw new Error("POLAR_ACCESS_TOKEN is not configured");
 
-  const res = await fetch(`${env.POLAR_API_BASE}/v1/checkouts/`, {
+  const res = await fetch(`${env.POLAR_API_BASE_URL}/v1/checkouts/`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
