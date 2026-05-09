@@ -59,7 +59,7 @@ const fulfillCheckoutSession = async (
                 userId: session.userId,
                 status: "paid",
                 totalCents: session.totalCents,
-                polarcheckoutId: checkoutId ?? session.polarCheckoutId ?? null,
+                polarCheckoutId: checkoutId ?? session.polarCheckoutId ?? null,
                 ...(polarOrderId ? { polarOrderId } : {}),
             })
             .returning();

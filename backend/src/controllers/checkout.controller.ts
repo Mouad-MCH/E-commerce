@@ -66,6 +66,7 @@ export const createCheckout = async (req: Request, res: Response, next: NextFunc
 
         for(const line  of parced.data.items) {
             const p = byId.get(line.productId);
+            if(!p) continue;
             totalCents += p.priceCents * line.quantity;
 
             lines.push({
