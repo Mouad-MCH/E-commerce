@@ -6,6 +6,8 @@ import { clerkWebhookHandler } from "./webhooks/clerk";
 import env from "./lib/env";
 import keepAliveCron from "./lib/cron";
 
+import * as Sentry from "@sentry/node";
+
 import fs from "node:fs"
 import path from "node:path"
 
@@ -14,6 +16,7 @@ import productRouter from "./routes/product.route";
 import streamRouter from "./routes/stream.route";
 import checkoutRouter from "./routes/checkout.route";
 import { polarWebhookHandler } from "./webhooks/polar";
+import { sentryClerkUserMiddleware } from "./middleware/sentryClerkUser";
 
 
 const app = express();
@@ -21,6 +24,7 @@ const app = express();
 const rawJson = express.raw({ type: 'application/json', limit: "1mb" }) 
 app.use(cors())
 app.use(clerkMiddleware())
+app.use(sentryClerkUserMiddleware)
 
 app.post('/webhooks/clerk', rawJson, (req, res) => {
     void clerkWebhookHandler(req, res)
@@ -60,8 +64,17 @@ if(fs.existsSync(publicDir)) {
     })
 }
 
-
+Sentry.setupExpressErrorHandler(app);
 // todo: add error handler middlewere
+
+app.use((_err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    const sentryId = (res as express.Response & { sentry?: string }).sentry;
+
+    res.status(500).json({
+        error: "Internal Server Error",
+        ...(sentryId !== "undefined" && { sentryId }),
+    })
+});
 
 app.listen(env.PORT, () => {
     console.log(`server running on http://localhost:${env.PORT}`)
