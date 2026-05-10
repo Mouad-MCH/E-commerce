@@ -39,6 +39,8 @@ const envSchema = z.object({
     STREAM_API_SECRET: z.string().min(1),
 
     IMAGEKIT_PUBLIC_KEY: z.string().min(1),
+    IMAGEKIT_PRIVATE_KEY: z.string().min(1),
+    IMAGEKIT_URL_ENDPOINT: z.string().url(),
 
     FRONTEND_URL: z.string().url()
 });

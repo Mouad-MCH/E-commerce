@@ -33,15 +33,16 @@ export const users = pgTable("users", {
 export const products = pgTable('products', {
     id: uuid("id").defaultRandom().primaryKey(),
     slug: text("slug").notNull().unique(),
-    name: text("category").notNull(),
+    name: text("name").notNull(),
     category: text("category").notNull().default("General"),
     description: text('description').notNull().default(""),
     priceCents: integer("price_cents").notNull(),
-    currency: text("image_url"),
+    currency: text("currency").notNull().default("usd"),
+    imageUrl: text("image_url"),
 
-    /* ImageKit `filedId` for deletes */
+    /* ImageKit fileId for deletes */
 
-    imageKitFiledId: text("image_kit_file_id"),
+    imageKitFileId: text("image_kit_file_id"),
     active: boolean("active").notNull().default(true),
     createAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 })
